@@ -1,0 +1,15 @@
+---
+# tasks file for prometheus
+- name: Add prometheus repo
+  kubernetes.core.helm_repository:
+    name:  "{{ prometheus_repo_name }}"
+    repo_url:  "{{ prometheus_chart_url }}"
+
+- name: Deploy prometheus
+  kubernetes.core.helm:
+    name: "{{ prometheus_release_name }}"
+    chart_ref: "{{ prometheus_chart_name }}"
+    release_namespace: "{{ prometheus_namespace }}"
+    create_namespace: true
+    wait: yes
+    values: "{{ prometheus_values }}"

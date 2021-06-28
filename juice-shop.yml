@@ -1,0 +1,15 @@
+
+- hosts: localhost
+  roles:
+    - role: cert-manager
+      tags: role-cert-manager
+    - role: ingress-controller
+      tags: role-ingress-controller
+    - role: dns
+      tags: role-dns
+    - role: juice-shop
+      tags: role-juice-shop
+    - role: prometheus
+      tags: role-prometheus
+    - role: grafana
+      tags: role-grafana
