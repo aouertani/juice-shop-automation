@@ -1,2 +1,62 @@
 ---
 # tasks file for grafana
+- name: Add prometheus repo
+  kubernetes.core.helm_repository:
+    name:  "{{ grafana_repo_name }}"
+    repo_url:  "{{ grafana_chart_url }}"
+
+# TODO: check kubernetes.core.helm why kubernetes.core.helm doesn't create pvc for grafana helm chart
+#- name: Deploy grafana
+#  kubernetes.core.helm:
+#    name: "{{ grafana_release_name }}"
+#    chart_ref: "{{ grafana_chart_name }}"
+#    release_namespace: "{{ grafana_namespace }}"
+#    values: "{{ lookup('template', 'templates/values.yaml') | from_yaml }}"
+#    wait: yes
+  
+- name: Create grafana helm values
+  set_fact:
+    grafana_values_rendered="{% for option in grafana_values %}--set {{ option }} {% endfor %}"
+
+- name: Install grafana release
+  shell:
+    set -o errexit
+    set -o pipefail
+    set -o nounset
+
+    helm install {{ grafana_release_name }} {{ grafana_chart_name }}
+    --namespace {{ grafana_namespace }}
+    {{ grafana_values_rendered }}
+
+    exit 0
+  run_once: True
+  changed_when: False
+  args:
+    executable: "/bin/bash"
+
+- name: Install grafana ingress 
+  k8s:
+    state: present
+    definition:
+      apiVersion: networking.k8s.io/v1beta1
+      kind: Ingress
+      metadata:
+        name: "{{ grafana_release_name }}"
+        namespace: "{{ grafana_namespace }}"
+        annotations:
+          cert-manager.io/cluster-issuer: "{{ letsencrypt }}"
+          kubernetes.io/ingress.class: nginx
+          nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      spec:
+        tls:
+          - hosts:
+              - "{{ grafana_host }}"
+            secretName: "{{ secret_name }}"
+        rules:
+          - host: "{{ grafana_host }}"
+            http:
+              paths:
+              - path: /
+                backend:
+                  serviceName: "{{ service_name }}"
+                  servicePort: "{{ service_port }}"

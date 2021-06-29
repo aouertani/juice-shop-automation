@@ -1,2 +1,33 @@
 ---
 # defaults file for grafana
+
+# Helm chart version
+grafana_chart_version: "v1.3.1"
+
+# Helm release name
+grafana_release_name: "grafana"
+
+# Helm repository name
+grafana_repo_name: "grafana"
+
+# Helm chart name
+grafana_chart_name: "{{ grafana_repo_name }}/{{ grafana_release_name }}"
+
+# Helm chart URL
+grafana_chart_url: "https://grafana.github.io/helm-charts"
+
+# Kubernetes namespace where grafana resources should be installed
+grafana_namespace: "monitoring"
+
+# The following table contains the configurable parameters of the grafana
+grafana_values:
+   - persistence.enabled=true
+   - persistence.type=pvc
+   - persistence.size=8Gi
+
+# Grafana ingress params 
+letsencrypt: letsencrypt-prod
+grafana_host: grafana.auto.mambudemo.com
+secret_name: garafana-cert
+service_name: grafana
+service_port: 80

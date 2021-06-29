@@ -1,2 +1,17 @@
 ---
 # defaults file for juice-shop
+# Helm release name
+juice_shop_release_name: "juice-shop"
+
+# Helm repository name
+juice_shop_repo_name: "juice-shop"
+
+
+# Helm chart URL
+juice_shop_repo_url: "https://kubernetes.github.io/ingress-nginx"
+
+# Kubernetes namespace where juice-shop resources should be installed
+juice_shop_namespace: "juice-shop"
+
+# Path to clone juic-shop helm repository 
+juice_shop_clone_repo: /tmp/demo_repo
