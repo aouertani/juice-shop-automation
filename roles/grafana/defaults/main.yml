@@ -31,3 +31,16 @@ grafana_host: grafana.auto.mambudemo.com
 secret_name: garafana-cert
 service_name: grafana
 service_port: 80
+
+# Users credentials
+# Admin user
+admin_username: admin
+admin_password: changeme
+# Created user info
+user_name: "Bruce Wayne"
+user_email: batman@gotham.city
+user_login: batman
+user_password: changme
+
+
+
