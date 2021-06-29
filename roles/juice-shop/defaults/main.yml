@@ -8,7 +8,7 @@ juice_shop_repo_name: "juice-shop"
 
 
 # Helm chart URL
-juice_shop_repo_url: "https://kubernetes.github.io/ingress-nginx"
+juice_shop_repo_url: "https://github.com/aouertani/juice-shop-dep.git"
 
 # Kubernetes namespace where juice-shop resources should be installed
 juice_shop_namespace: "juice-shop"
