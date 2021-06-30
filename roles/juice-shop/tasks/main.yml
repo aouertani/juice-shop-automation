@@ -1,11 +1,11 @@
 ---
 # tasks file for juice-shop
-- name: Git clone stable repo on HEAD
+- name: Git clone juice-shop repo on HEAD
   ansible.builtin.git:
     repo: "{{ juice_shop_repo_url }}"
     dest: "{{ juice_shop_clone_repo }}"
 
-- name: Deploy Grafana chart from local path
+- name: Deploy juice-shop chart from local path
   kubernetes.core.helm:
     name: "{{ juice_shop_release_name }}"
     chart_ref: "{{ juice_shop_clone_repo }}"

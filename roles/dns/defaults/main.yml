@@ -1,2 +1,14 @@
 ---
 # defaults file for dns
+
+zone_name: mambudemo-com
+juice_shop_dns: juiceshop.mambudemo.com
+grafana_dns: grafana.juiceshop.mambudemo.com
+
+ingress_nginx_controller: ingress-nginx-controller
+cert_manager_name_space: cert-manager
+
+gcp_project: curious-furnace-316611
+gcp_cred_kind: serviceaccount
+
+gcp_cred_file: "/Users/aouertaniz/work/kube/courses/auth.pem"

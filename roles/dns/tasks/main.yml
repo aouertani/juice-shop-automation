@@ -1,2 +1,86 @@
 ---
 # tasks file for dns
+- name: Get Ingress Controller external IP
+  shell:
+    set -o errexit
+    set -o pipefail
+    set -o nounset
+
+      kubectl describe service {{ ingress_nginx_controller }} -n  {{ cert_manager_name_space }} |
+       grep "LoadBalancer Ingress:" |
+       awk '{print $3;}'
+
+    exit 0
+  run_once: True
+  changed_when: False
+  register: result
+  args:
+    executable: "/bin/bash"
+
+- set_fact:
+    ingress_controller_ip: "{{ result.stdout_lines[0] }}"
+
+#- name: Create a managed zone
+#  google.cloud.gcp_dns_managed_zone:
+#    name: mambuzone
+#    description: test zone
+#    dns_name: automambu.com.
+#    project: "{{ gcp_project }}"
+#    auth_kind: "{{ gcp_cred_kind }}"
+#    service_account_file: "{{ gcp_cred_file }}"
+#    state: present
+#  register: managed_zone
+
+# TODO: insepect why gcloud collection returns 400 Client Error: Bad Request 
+#- name: Create a resource record set
+#  google.cloud.gcp_dns_resource_record_set:
+#    name: test.mambudemo.com.
+#    managed_zone: "{{ managed_zone }}"
+#    type: A
+#    ttl: 600
+#    target:
+#    - "{{ ingress_controller_ip }}"
+#    project:  "{{ gcp_project }}"
+#    auth_kind: serviceaccount
+#    service_account_file: "{{ gcp_cred_file }}"
+#    state: present
+
+- name: Create juice-shop resource record set
+  shell:
+    set -o errexit
+    set -o pipefail
+    set -o nounset
+
+      gcloud dns --project=curious-furnace-316611 record-sets transaction start --zone={{ zone_name }} ;
+      gcloud dns --project=curious-furnace-316611 record-sets transaction add {{ ingress_controller_ip }} --name={{ juice_shop_dns }}. --ttl=300 --type=A --zone={{ zone_name }} ;
+      gcloud dns --project=curious-furnace-316611 record-sets transaction execute --zone={{ zone_name }}
+
+    exit 0
+  run_once: True
+  changed_when: False
+  register: result
+  args:
+    executable: "/bin/bash"
+
+- set_fact:
+    juice_shop_dns : "{{ juice_shop_dns }}"
+
+- name: Create grafana resource record set
+  shell:
+    set -o errexit
+    set -o pipefail
+    set -o nounset
+
+      gcloud dns --project=curious-furnace-316611 record-sets transaction start --zone={{ zone_name }} ;
+      gcloud dns --project=curious-furnace-316611 record-sets transaction add {{ ingress_controller_ip }} --name={{ grafana_dns }}. --ttl=300 --type=A --zone={{ zone_name }} ;
+      gcloud dns --project=curious-furnace-316611 record-sets transaction execute --zone={{ zone_name }}
+
+    exit 0
+  run_once: True
+  changed_when: False
+  register: result
+  args:
+    executable: "/bin/bash"
+
+- set_fact:
+    juice_shop_dns : "{{ grafana_dns }}"

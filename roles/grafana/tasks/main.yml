@@ -50,10 +50,10 @@
       spec:
         tls:
           - hosts:
-              - "{{ grafana_host }}"
+              - "{{ grafana_dns }}"
             secretName: "{{ secret_name }}"
         rules:
-          - host: "{{ grafana_host }}"
+          - host: "{{ grafana_dns }}"
             http:
               paths:
               - path: /

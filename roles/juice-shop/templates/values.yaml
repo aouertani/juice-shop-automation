@@ -62,13 +62,13 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt-prod ,
      }
   hosts:
-    - host: auto.mambudemo.com
+    - host: "{{ juice_shop_dns }}"
       paths:
         - /
   tls: 
     - secretName: demo-cert
       hosts:
-        - auto.mambudemo.com
+        - "{{ juice_shop_dns }}"
 
 resources: 
   # We usually recommend not to specify default resources and to leave this as a conscious
