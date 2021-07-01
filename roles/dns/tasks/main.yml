@@ -83,4 +83,4 @@
     executable: "/bin/bash"
 
 - set_fact:
-    juice_shop_dns : "{{ grafana_dns }}"
+    grafana_dns : "{{ grafana_dns }}"
