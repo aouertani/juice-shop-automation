@@ -45,42 +45,51 @@
 #    service_account_file: "{{ gcp_cred_file }}"
 #    state: present
 
-- name: Create juice-shop resource record set
-  shell:
-    set -o errexit
-    set -o pipefail
-    set -o nounset
+- name: Handling juice-shop resource record set creation
+  block:
+    - name: Create juice-shop resource record set
+      shell:
+        set -o errexit
+        set -o pipefail
+        set -o nounset
 
-      gcloud dns --project=curious-furnace-316611 record-sets transaction start --zone={{ zone_name }} ;
-      gcloud dns --project=curious-furnace-316611 record-sets transaction add {{ ingress_controller_ip }} --name={{ juice_shop_dns }}. --ttl=300 --type=A --zone={{ zone_name }} ;
-      gcloud dns --project=curious-furnace-316611 record-sets transaction execute --zone={{ zone_name }}
+          gcloud dns --project={{ gcp_project }} record-sets transaction start --zone={{ zone_name }} ;
+          gcloud dns --project={{ gcp_project }}  record-sets transaction add {{ ingress_controller_ip }} --name={{ juice_shop_dns }}. --ttl=300 --type=A --zone={{ zone_name }} ;
+          gcloud dns --project={{ gcp_project }}  record-sets transaction execute --zone={{ zone_name }}
 
-    exit 0
-  run_once: True
-  changed_when: False
-  register: result
-  args:
-    executable: "/bin/bash"
+        exit 0
+      run_once: True
+      changed_when: False
+      register: result
+      args:
+        executable: "/bin/bash"
+  rescue:
+    - name: Abort record set creation
+      command: gcloud dns --project={{ gcp_project }}  record-sets transaction abort --zone={{ zone_name }}
 
 - set_fact:
     juice_shop_dns : "{{ juice_shop_dns }}"
 
-- name: Create grafana resource record set
-  shell:
-    set -o errexit
-    set -o pipefail
-    set -o nounset
+- name: Handling grafana resource record set creation
+  block:
+    - name: Create grafana resource record set
+      shell:
+        set -o errexit
+        set -o pipefail
+        set -o nounset
 
-      gcloud dns --project=curious-furnace-316611 record-sets transaction start --zone={{ zone_name }} ;
-      gcloud dns --project=curious-furnace-316611 record-sets transaction add {{ ingress_controller_ip }} --name={{ grafana_dns }}. --ttl=300 --type=A --zone={{ zone_name }} ;
-      gcloud dns --project=curious-furnace-316611 record-sets transaction execute --zone={{ zone_name }}
+          gcloud dns --project={{ gcp_project }}  record-sets transaction start --zone={{ zone_name }} ;
+          gcloud dns --project={{ gcp_project }}  record-sets transaction add {{ ingress_controller_ip }} --name={{ grafana_dns }}. --ttl=300 --type=A --zone={{ zone_name }} ;
+          gcloud dns --project={{ gcp_project }}  record-sets transaction execute --zone={{ zone_name }}
 
-    exit 0
-  run_once: True
-  changed_when: False
-  register: result
-  args:
-    executable: "/bin/bash"
+        exit 0
+      run_once: True
+      changed_when: False
+      args:
+        executable: "/bin/bash"
+  rescue:
+    - name: Abort record set creation
+      command: gcloud dns --project={{ gcp_project }}  record-sets transaction abort --zone={{ zone_name }}
 
 - set_fact:
     grafana_dns : "{{ grafana_dns }}"

@@ -2,6 +2,7 @@
 # defaults file for dns
 
 zone_name: mambudemo-com
+
 juice_shop_dns: juiceshop.mambudemo.com
 grafana_dns: grafana.juiceshop.mambudemo.com
 
@@ -11,4 +12,4 @@ cert_manager_name_space: cert-manager
 gcp_project: curious-furnace-316611
 gcp_cred_kind: serviceaccount
 
-gcp_cred_file: "/Users/aouertaniz/work/kube/courses/auth.pem"
+gcp_cred_file: "path_to_service_account_key_file"

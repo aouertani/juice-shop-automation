@@ -27,10 +27,15 @@ grafana_values:
 
 # Grafana ingress params 
 letsencrypt: letsencrypt-prod
-grafana_host: grafana.auto.mambudemo.com
+grafana_host: "{{ grafana_dns }}"
 secret_name: garafana-cert
 service_name: grafana
 service_port: 80
+
+# Prometheus data source details
+data_source_name: prometheus
+data_source_type: prometheus
+data_source_url: http://prometheus-server 
 
 # Users credentials
 # Admin user

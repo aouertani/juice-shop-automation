@@ -18,6 +18,9 @@
   set_fact:
     grafana_values_rendered="{% for option in grafana_values %}--set {{ option }} {% endfor %}"
 
+# https://github.com/helm/charts/issues/4665 
+# grafana helm chart removes all data on upgrade 
+# All users and dahsboards neeed to be created once again
 - name: Install grafana release
   shell:
     set -o errexit
@@ -61,12 +64,17 @@
                   serviceName: "{{ service_name }}"
                   servicePort: "{{ service_port }}"
 
+- name: Get grafana admin credentials
+  shell:
+    cmd: kubectl get secret --namespace monitoring grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+  register: result
+
 # TODO create secrets or key to connect to grafana 
 - name: Create or update a grafana user
   community.grafana.grafana_user:
     url: "https://{{ grafana_host}}"
     url_username: "{{ admin_username }}"
-    url_password: "{{ admin_password }}"
+    url_password: "{{ result.stdout }}"
     name: "{{ user_name }}"
     email: "{{ user_email }}"
     login:  "{{ user_login }}"
@@ -74,12 +82,32 @@
     is_admin: true
     state: present
 
-- name: Import Grafana dashboard Juice Shop Instance Status
-  community.grafana.grafana_dashboard:
+- name: Create prometheus data source
+  community.grafana.grafana_datasource:
     grafana_url: "https://{{ grafana_host}}"
-    url_username: "{{ admin_username }}"
-    url_password: "{{ admin_password }}"
-    state: present
-    commit_message: Updated by ansible
-    overwrite: yes
-    path: "{{ role_path }}/files/demo-grafana-dashboard.json"
+    grafana_user:  "{{ admin_username }}"
+    grafana_password: "{{ result.stdout }}"
+    name: "{{ data_source_name }}"
+    ds_type: "{{ data_source_type }}"
+    ds_url: "{{ data_source_url }}"
+    access: direct
+    use_proxy: no
+    tls_skip_verify: true
+
+
+- name: Handling grafana resource record set creation
+  block:
+    - name: Import Grafana dashboard Juice Shop Instance Status
+      community.grafana.grafana_dashboard:
+        grafana_url: "https://{{ grafana_host}}"
+        url_username: "{{ admin_username }}"
+        url_password: "{{ result.stdout }}"
+        state: present
+        commit_message: Updated by ansible
+        overwrite: yes
+        path: "{{ role_path }}/files/demo-grafana-dashboard.json"
+        state: present
+  rescue:
+    - name: Rescue grafana dashboard creation
+      debug:
+        msg: Garafana dashboard already exists or cannot be created.
