@@ -2,6 +2,8 @@
 - hosts: localhost
 
   roles:
+    - role: common
+      tags: role-common
     - role: cert-manager
       tags: role-cert-manager
     - role: ingress-controller

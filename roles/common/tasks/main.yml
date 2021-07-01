@@ -1,0 +1,55 @@
+---
+# tasks file for common
+
+- name: Check if kubectl command is installed locally
+  shell: hash kubectl
+  run_once: True
+  changed_when: False
+  args:
+    executable: "/bin/bash"
+
+- name: Check if Helm command is installed locally
+  shell: hash helm
+  run_once: True
+  changed_when: False
+  args:
+    executable: "/bin/bash"
+
+- name: Check if gcloud command is installed locally
+  shell: hash gcloud
+  run_once: True
+  changed_when: False
+  args:
+    executable: "/bin/bash"
+
+
+- name: Create juice-shop resource record set
+  shell:
+    set -o errexit
+    set -o pipefail
+    set -o nounset
+
+      gcloud auth activate-service-account --key-file={{ service_account_key_file }}
+
+    exit 0
+  run_once: True
+  changed_when: False
+  register: result
+  args:
+    executable: "/bin/bash"
+
+
+- name: Create juice-shop resource record set
+  shell:
+    set -o errexit
+    set -o pipefail
+    set -o nounset
+
+      gcloud container clusters get-credentials {{ cluster_id }} --zone {{ cluster_zone }} --project {{ gcp_project_id }}
+      
+    exit 0
+  run_once: True
+  changed_when: False
+  register: result
+  args:
+    executable: "/bin/bash"

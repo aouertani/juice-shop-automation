@@ -1,0 +1,7 @@
+---
+# defaults file for common
+service_account_key_file: "path_to_service_account_key_file"
+
+cluster_id: cluster-4
+cluster_zone: us-central1-c
+gcp_project_id: curious-furnace-316611
