@@ -1,0 +1,120 @@
+# juice-shop-automation
+
+A set of ansible roles and playbooks to automatically deploy juice-shop application and its ecosystem in Google Cloud Platform (GKE).
+Each role manages a diffirent componenet and can be used separately:
+
+* common: Checks if kubectl, gcloud and helm are installed first and then authenticate to GKE using a service account key file and set the current context.
+* cert-manager: Deploys cert-manager in cert-manager namespace.
+* ingress-controller: Deploys ingress-controller in cert-manager name space and create let's encrypt staging and production issuers.
+* dns: Creates DNS record set in a managed zone. The zone needs to be created before running the role.
+* juice-shop: Deploys juice shop application in juice-shop namepace.
+* prometheus: Deploys prometheus in monitoring namespace.
+* grafana: Deploys grafan in monitoring namespace. Create a prometheus data source and a user then load Juice Shop Status Dashboard.
+
+```bash
+.
+├── juice-shop.yml
+├── LICENSE.md
+├── README.md
+└── roles
+    ├── cert-manager
+    │   ├── README.md
+    │   ├── defaults
+    │   │   └── main.yml
+    │   ├── meta
+    │   │   └── main.yml
+    │   ├── tasks
+    │   │   └── main.yml
+    ├── common
+    │   ├── README.md
+    │   ├── defaults
+    │   │   └── main.yml
+    │   ├── meta
+    │   │   └── main.yml
+    │   ├── tasks
+    │   │   ├── main.yml
+    │   │   └── prerequisites.yml
+    ├── dns
+    │   ├── README.md
+    │   ├── defaults
+    │   │   └── main.yml
+    │   ├── meta
+    │   │   └── main.yml
+    │   ├── tasks
+    │   │   └── main.yml
+    ├── grafana
+    │   ├── README.md
+    │   ├── defaults
+    │   │   └── main.yml
+    │   ├── files
+    │   │   └── demo-grafana-dashboard.json
+    │   ├── meta
+    │   │   └── main.yml
+    │   ├── tasks
+    │   │   └── main.yml
+    │   ├── templates
+    │   │   └── values.yaml
+    ├── ingress-controller
+    │   ├── README.md
+    │   ├── defaults
+    │   │   └── main.yml
+    │   ├── meta
+    │   │   └── main.yml
+    │   ├── tasks
+    │   │   └── main.yml
+    ├── juice-shop
+    │   ├── README.md
+    │   ├── defaults
+    │   │   └── main.yml
+    │   ├── meta
+    │   │   └── main.yml
+    │   ├── tasks
+    │   │   └── main.yml
+    │   ├── templates
+    │   │   └── values.yaml
+    └── prometheus
+        ├── README.md
+        ├── defaults
+        │   └── main.yml
+        ├── files
+        ├── handlers
+        │   └── main.yml
+        ├── meta
+        │   └── main.yml
+        ├── tasks
+        │   └── main.yml
+        ├── templates
+        ├── tests
+        │   ├── inventory
+        │   └── test.yml
+        └── vars
+            └── main.yml
+```
+
+# Prerequisites
+* ansible, helm, kubectl and gcloud should be installed in the machine that runs the playbooks
+* A GCP project and a running GKE cluster 
+* GOOGLE_APPLICATION_CREDENTIALS should contain the path to a service account key file: [instructions here](https://cloud.google.com/docs/authentication/production#automatically)
+* A cloud DNS managed zone
+
+# Deploy Juice Shop in GKE
+To deploy the application and its ecosystem, roles/common/defaults/main.yml should look like this:
+
+```bash
+---
+# defaults file for common
+service_account_key_file: "{{ lookup('env', 'GOOGLE_APPLICATION_CREDENTIALS') }}"
+
+cluster_id: cluster-5
+cluster_zone: europe-central2
+gcp_project_id: curious-furnace-316611
+```
+
+Once the required vars ared configured, run the main playbook:
+```bash
+ansible-playbook juice-shop.yml
+```
+Any role can be executed separately by specifying its tag:
+```bash
+ansible-playbook --tags=role-<role_name>  juice-shop.yml
+```
