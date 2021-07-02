@@ -1,7 +1,7 @@
 ---
 # defaults file for common
-service_account_key_file: "path_to_service_account_key_file"
+service_account_key_file: "{{ lookup('env', 'GOOGLE_APPLICATION_CREDENTIALS') }}"
 
-cluster_id: cluster-4
-cluster_zone: us-central1-c
+cluster_id: cluster-5
+cluster_zone: europe-central2
 gcp_project_id: curious-furnace-316611

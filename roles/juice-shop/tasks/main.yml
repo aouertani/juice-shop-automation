@@ -11,6 +11,7 @@
     chart_ref: "{{ juice_shop_clone_repo }}"
     release_namespace:  "{{ juice_shop_namespace }}"
     create_namespace: true
+    wait: yes
     values:  "{{ lookup('template', 'templates/values.yaml') | from_yaml }}"
 
 - name: Clean up cloned repository

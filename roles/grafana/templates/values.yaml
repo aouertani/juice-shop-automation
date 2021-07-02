@@ -1,0 +1,3 @@
+persistence.enabled: true
+persistence.type: pvc
+persistence.size: 8Gi

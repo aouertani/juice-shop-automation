@@ -1,29 +1,9 @@
 ---
 # tasks file for common
+- name: Include prerequisites
+  include_tasks: "tasks/prerequisites.yml"
 
-- name: Check if kubectl command is installed locally
-  shell: hash kubectl
-  run_once: True
-  changed_when: False
-  args:
-    executable: "/bin/bash"
-
-- name: Check if Helm command is installed locally
-  shell: hash helm
-  run_once: True
-  changed_when: False
-  args:
-    executable: "/bin/bash"
-
-- name: Check if gcloud command is installed locally
-  shell: hash gcloud
-  run_once: True
-  changed_when: False
-  args:
-    executable: "/bin/bash"
-
-
-- name: Create juice-shop resource record set
+- name:  gcloud auth activate service accountt
   shell:
     set -o errexit
     set -o pipefail
@@ -39,7 +19,7 @@
     executable: "/bin/bash"
 
 
-- name: Create juice-shop resource record set
+- name: Set current context
   shell:
     set -o errexit
     set -o pipefail
