@@ -24,7 +24,6 @@
     set -o errexit
     set -o pipefail
     set -o nounset
-    set timeout 20000
 
     helm upgrade --install {{ grafana_release_name }} {{ grafana_chart_name }} --namespace {{ grafana_namespace }}  {{ grafana_values_rendered }}
     
@@ -36,8 +35,9 @@
     executable: "/bin/bash"
 
 # Pause for 2 until grafana pod is ready.
-- pause:
+- pause: Pause for 2 until grafana pod is ready
     minutes: 2
+
 - name: Install grafana ingress 
   k8s:
     state: present
