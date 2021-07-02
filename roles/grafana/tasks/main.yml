@@ -35,7 +35,7 @@
     executable: "/bin/bash"
 
 # Pause for 2 until grafana pod is ready.
-- pause: Pause for 2 until grafana pod is ready
+- pause:
     minutes: 2
 
 - name: Install grafana ingress 

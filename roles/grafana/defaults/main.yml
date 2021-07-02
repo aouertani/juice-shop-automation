@@ -29,8 +29,8 @@ grafana_values:
   # - deploymentStrategy='{ 'type': { 'RollingUpdate': {'maxUnavailable': 1,  'maxSurge': 1 }}}"
   # - replicas=2
 
-grafana_persistence_accessModes:
-   - ReadWriteMany
+#grafana_persistence_accessModes:
+#   - ReadWriteMany
 
 # Grafana ingress params 
 letsencrypt: letsencrypt-prod
