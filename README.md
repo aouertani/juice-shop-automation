@@ -1,15 +1,15 @@
 # juice-shop-automation
 
 A set of ansible roles and playbooks to automatically deploy juice-shop application and its ecosystem in Google Cloud Platform (GKE).
-Each role manages a diffirent componenet and can be used separately:
+Each role manages a different componenet and can be used separately:
 
-* common: Checks if kubectl, gcloud and helm are installed first and then authenticate to GKE using a service account key file and set the current context.
+* common: Checks if kubectl, gcloud and helm are installed first and then authenticates to GKE using a service account key file and sets the current context.
 * cert-manager: Deploys cert-manager in cert-manager namespace.
-* ingress-controller: Deploys ingress-controller in cert-manager name space and create let's encrypt staging and production issuers.
+* ingress-controller: Deploys ingress-controller in cert-manager name space and creates let's encrypt staging and production issuers.
 * dns: Creates DNS record set in a managed zone. The zone needs to be created before running the role.
 * juice-shop: Deploys juice shop application in juice-shop namepace.
 * prometheus: Deploys prometheus in monitoring namespace.
-* grafana: Deploys grafan in monitoring namespace. Create a prometheus data source and a user then load Juice Shop Status Dashboard.
+* grafana: Deploys grafan in monitoring namespace. Creates a prometheus data source and a user then loads Juice Shop Status Dashboard.
 
 ```bash
 .
@@ -110,7 +110,7 @@ cluster_zone: europe-central2
 gcp_project_id: curious-furnace-316611
 ```
 
-Once the required vars ared configured, run the main playbook:
+Once the required vars are configured, run the main playbook:
 ```bash
 ansible-playbook juice-shop.yml
 ```
