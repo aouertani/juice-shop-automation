@@ -31,65 +31,34 @@
 #    state: present
 #  register: managed_zone
 
-# TODO: insepect why gcloud collection returns 400 Client Error: Bad Request 
-#- name: Create a resource record set
-#  google.cloud.gcp_dns_resource_record_set:
-#    name: test.mambudemo.com.
-#    managed_zone: "{{ managed_zone }}"
-#    type: A
-#    ttl: 600
-#    target:
-#    - "{{ ingress_controller_ip }}"
-#    project:  "{{ gcp_project }}"
-#    auth_kind: serviceaccount
-#    service_account_file: "{{ gcp_cred_file }}"
-#    state: present
+- name: Create juice shop record set
+  google.cloud.gcp_dns_resource_record_set:
+    name: "{{ juice_shop_dns }}."
+    managed_zone: "{{ zone_name }}"
+    type: A
+    ttl: 600
+    target:
+    - "{{ ingress_controller_ip }}"
+    project:  "{{ gcp_project }}"
+    auth_kind: serviceaccount
+    service_account_file: "{{ gcp_cred_file }}"
+    state: present
 
-- name: Handling juice-shop resource record set creation
-  block:
-    - name: Create juice-shop resource record set
-      shell:
-        set -o errexit
-        set -o pipefail
-        set -o nounset
-
-          gcloud dns --project={{ gcp_project }} record-sets transaction start --zone={{ zone_name }} ;
-          gcloud dns --project={{ gcp_project }}  record-sets transaction add {{ ingress_controller_ip }} --name={{ juice_shop_dns }}. --ttl=300 --type=A --zone={{ zone_name }} ;
-          gcloud dns --project={{ gcp_project }}  record-sets transaction execute --zone={{ zone_name }}
-
-        exit 0
-      run_once: True
-      changed_when: False
-      register: result
-      args:
-        executable: "/bin/bash"
-  rescue:
-    - name: Abort record set creation
-      command: gcloud dns --project={{ gcp_project }}  record-sets transaction abort --zone={{ zone_name }}
+- name: Create grafana record set
+  google.cloud.gcp_dns_resource_record_set:
+    name: "{{ grafana_dns }}."
+    managed_zone: "{{ zone_name }}"
+    type: A
+    ttl: 600
+    target:
+    - "{{ ingress_controller_ip }}"
+    project:  "{{ gcp_project }}"
+    auth_kind: serviceaccount
+    service_account_file: "{{ gcp_cred_file }}"
+    state: present
 
 - set_fact:
     juice_shop_dns : "{{ juice_shop_dns }}"
-
-- name: Handling grafana resource record set creation
-  block:
-    - name: Create grafana resource record set
-      shell:
-        set -o errexit
-        set -o pipefail
-        set -o nounset
-
-          gcloud dns --project={{ gcp_project }}  record-sets transaction start --zone={{ zone_name }} ;
-          gcloud dns --project={{ gcp_project }}  record-sets transaction add {{ ingress_controller_ip }} --name={{ grafana_dns }}. --ttl=300 --type=A --zone={{ zone_name }} ;
-          gcloud dns --project={{ gcp_project }}  record-sets transaction execute --zone={{ zone_name }}
-
-        exit 0
-      run_once: True
-      changed_when: False
-      args:
-        executable: "/bin/bash"
-  rescue:
-    - name: Abort record set creation
-      command: gcloud dns --project={{ gcp_project }}  record-sets transaction abort --zone={{ zone_name }}
 
 - set_fact:
     grafana_dns : "{{ grafana_dns }}"

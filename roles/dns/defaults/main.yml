@@ -1,7 +1,9 @@
 ---
 # defaults file for dns
 
-zone_name: mambudemo-com
+zone_name: 
+  name: mambudemo-com
+  dnsName: mambudemo.com.
 
 juice_shop_dns: juiceshop.mambudemo.com
 grafana_dns: grafana.juiceshop.mambudemo.com

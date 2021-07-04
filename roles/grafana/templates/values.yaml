@@ -1,3 +1,10 @@
-persistence.enabled: true
-persistence.type: pvc
-persistence.size: 8Gi
+persistence:
+  type: pvc
+  enabled: true
+  # storageClassName: default
+  accessModes:
+    - ReadWriteOnce
+  size: 10Gi
+
+deploymentStrategy:
+  type: Recreate

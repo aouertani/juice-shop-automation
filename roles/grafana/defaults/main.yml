@@ -19,19 +19,6 @@ grafana_chart_url: "https://grafana.github.io/helm-charts"
 # Kubernetes namespace where grafana resources should be installed
 grafana_namespace: "monitoring"
 
-# The following table contains the configurable parameters of the grafana
-grafana_values:
-   - persistence.enabled=true
-   - persistence.type=pvc
-   - persistence.size=8Gi
- #  - persistence.accessModes={{ grafana_persistence_accessModes }}
-  # - deploymentStrategy=\{"type":"RollingUpdate" \}
-  # - deploymentStrategy='{ 'type': { 'RollingUpdate': {'maxUnavailable': 1,  'maxSurge': 1 }}}"
-  # - replicas=2
-
-#grafana_persistence_accessModes:
-#   - ReadWriteMany
-
 # Grafana ingress params 
 letsencrypt: letsencrypt-prod
 grafana_host: "{{ grafana_dns }}"
@@ -40,7 +27,7 @@ service_name: grafana
 service_port: 80
 
 # Prometheus data source details
-data_source_name: prometheus
+data_source_name: Prometheus
 data_source_type: prometheus
 data_source_url: http://prometheus-server 
 

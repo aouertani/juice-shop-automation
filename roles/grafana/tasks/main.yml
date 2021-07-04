@@ -6,37 +6,13 @@
     repo_url:  "{{ grafana_chart_url }}"
 
 # TODO: check kubernetes.core.helm why kubernetes.core.helm doesn't create pvc for grafana helm chart
-# - name: Deploy grafana
-#   kubernetes.core.helm:
-#     name: "{{ grafana_release_name }}"
-#     chart_ref: "{{ grafana_chart_name }}"
-#     release_namespace: "{{ grafana_namespace }}"
-#     values: "{{ lookup('template', 'templates/values.yaml') | from_yaml }}"
-#     wait: yes
-  
-- name: Create grafana helm values
-  set_fact:
-    grafana_values_rendered="{% for option in grafana_values %}--set {{ option }} {% endfor %}"
-
-# TODO: check grafana chart's issue with PVC 
-- name: Install grafana release
-  shell:
-    set -o errexit
-    set -o pipefail
-    set -o nounset
-
-    helm upgrade --install {{ grafana_release_name }} {{ grafana_chart_name }} --namespace {{ grafana_namespace }}  {{ grafana_values_rendered }}
-    
-    exit 0
-  run_once: True
-  changed_when: False
-  
-  args:
-    executable: "/bin/bash"
-
-# Pause for 2 until grafana pod is ready.
-- pause:
-    minutes: 2
+- name: Deploy grafana
+  community.kubernetes.helm:
+    name: "{{ grafana_release_name }}"
+    chart_ref: "{{ grafana_chart_name }}"
+    release_namespace: "{{ grafana_namespace }}"
+    values: "{{ lookup('template', 'templates/values.yaml') | from_yaml }}"
+    wait: yes
 
 - name: Install grafana ingress 
   k8s:
@@ -100,7 +76,7 @@
         name: "{{ data_source_name }}"
         ds_type: "{{ data_source_type }}"
         ds_url: "{{ data_source_url }}"
-        access: direct
+        access: proxy
         use_proxy: no
         tls_skip_verify: true
   rescue:
