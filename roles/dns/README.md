@@ -46,5 +46,5 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: servers
       roles:
-         - role: dna
+         - role: dns
       tags: role-dns
