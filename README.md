@@ -98,9 +98,10 @@ Each role manages a different componenet and can be used separately:
 * A cloud DNS managed zone
 
 # Deploy Juice Shop in GKE
-To deploy the application and its ecosystem, roles/common/defaults/main.yml should look like this:
+To deploy the application and its ecosystem:
 
-```bash
+* roles/common/defaults/main.yml should look like this:
+```yaml
 ---
 # defaults file for common
 service_account_key_file: "{{ lookup('env', 'GOOGLE_APPLICATION_CREDENTIALS') }}"
@@ -109,12 +110,20 @@ cluster_id: cluster-5
 cluster_zone: europe-central2
 gcp_project_id: curious-furnace-316611
 ```
-
-Once the required vars are configured, run the main playbook:
+* Juice Shop and Grafana URLs can be set here roles/dns/defaults/main.yml:
+```yaml
+---
+# defaults file for common
+...
+juice_shop_dns: juiceshop.mambudemo.com
+grafana_dns: grafana.juiceshop.mambudemo.com
+...
+```
+* Once the required vars are configured, run the main playbook:
 ```bash
 ansible-playbook juice-shop.yml
 ```
-Any role can be executed separately by specifying its tag:
+* Any role can be executed separately by specifying its tag:
 ```bash
 ansible-playbook --tags=role-<role_name>  juice-shop.yml
 ```
