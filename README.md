@@ -115,7 +115,7 @@ gcp_project_id: curious-furnace-316611
 * Juice Shop and Grafana URLs can be set here roles/dns/defaults/main.yml:
 ```yaml
 ---
-# defaults file for common
+# defaults file for dns
 ...
 juice_shop_dns: juiceshop.mambudemo.com
 grafana_dns: grafana.juiceshop.mambudemo.com
