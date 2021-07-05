@@ -40,7 +40,7 @@ cert_manager_values:
 Dependencies
 ------------
 
-This role needs ommunity.kubernetes collection. It can be set in roles/cert-manager/meta/main.yml
+This role needs community.kubernetes collection. It can be set in roles/cert-manager/meta/main.yml
 ```yaml
 ---
   dependencies:
