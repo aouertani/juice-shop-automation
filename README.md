@@ -11,6 +11,8 @@ Each role manages a different componenet and can be used separately:
 * prometheus: Deploys prometheus in monitoring namespace.
 * grafana: Deploys grafana in monitoring namespace. Creates a prometheus data source and a user then loads Juice Shop Status Dashboard.
 
+Each role is described with more details on its README.md file.
+
 ```bash
 .
 ├── juice-shop.yml
