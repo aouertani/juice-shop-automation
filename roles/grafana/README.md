@@ -1,22 +1,84 @@
-Role Name
+Role Name: grafana
 =========
 
-A brief description of the role goes here.
+This role:
+* deploys grafana in monitoring namespace
+* creates a prometheus data source
+* create an admin user
+* loads Juice Shop Status Dashboard from roles/grafana/files/demo-grafana-dashboard.json
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+This role needs the following roles to be run first:
+* common
+* cert-manager
+* ingress-controller
+* prometheus
+* dns
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```yaml
+---
+# Helm release name
+grafana_release_name: "grafana"
 
+# Helm repository name
+grafana_repo_name: "grafana"
+
+# Helm chart name
+grafana_chart_name: "{{ grafana_repo_name }}/{{ grafana_release_name }}"
+
+# Helm chart URL
+grafana_chart_url: "https://grafana.github.io/helm-charts"
+
+# Kubernetes namespace where grafana resources should be installed
+grafana_namespace: "monitoring"
+
+# Grafana ingress params 
+letsencrypt: letsencrypt-prod
+grafana_host: "{{ grafana_dns }}"
+secret_name: garafana-cert
+service_name: grafana
+service_port: 80
+
+# Prometheus data source details
+data_source_name: Prometheus
+data_source_type: prometheus
+data_source_url: http://prometheus-server 
+
+# Users credentials
+# Admin user
+admin_username: admin
+# Created user info
+user_name: "Bruce Wayne"
+user_email: batman@gotham.city
+user_login: batman
+user_password: changme
+```
+Grafana chart values in roles/grafana/templates/values.yaml
+```yaml
+---
+persistence:
+  type: pvc
+  enabled: true
+  size: 10Gi
+
+deploymentStrategy:
+  type: Recreate
+```
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+This role needs community.kubernetes collection. It can be set in roles/grafana/meta/main.yml
+```yaml
+---
+  dependencies:
+    "community.kubernetes": "*"
+    "community.grafana": "*"
+```
 
 Example Playbook
 ----------------
@@ -25,14 +87,5 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+         - role: grafana
+      tags: role-grafana
