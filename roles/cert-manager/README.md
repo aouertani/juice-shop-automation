@@ -1,22 +1,51 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+This role deploys cert manager using its helm chart
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+This role does not have any dependencies and can be run separately.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```yaml
+---
+# Helm chart version
+cert_manager_chart_version: "v1.3.1"
+
+# Helm release name
+cert_manager_release_name: "cert-manager"
+
+# Helm repository name
+cert_manager_repo_name: "jetstack"
+
+# Helm chart name
+cert_manager_chart_name: "{{ cert_manager_repo_name }}/{{ cert_manager_release_name }}"
+
+# Helm chart URL
+cert_manager_chart_url: "https://charts.jetstack.io"
+
+# Kubernetes namespace where cert-manager resources should be installed
+cert_manager_namespace: "cert-manager"
+
+# The following table contains the configurable parameters of the cert-manager
+cert_manager_values:
+   installCRDs: true
+   prometheus.servicemonitor.enabled: true
+```
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+This role needs ommunity.kubernetes collection. It can be set in roles/cert-manager/meta/main.yml
+```yaml
+---
+  dependencies:
+    "community.kubernetes": "*"
+```
 
 Example Playbook
 ----------------
@@ -25,14 +54,5 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+         - role: cert-manager
+      tags: role-cert-manager
