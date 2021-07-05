@@ -16,3 +16,12 @@
       tags: role-prometheus
     - role: grafana
       tags: role-grafana
+
+  tasks:
+    - name: Juice Shop application URL
+      debug:
+        msg: "Juice Shop application URL: https://{{ juice_shop_dns }}"
+    
+    - name: Grafana application URL
+      debug:
+        msg: "Grafana application URL: https://{{ grafana_dns }}"
