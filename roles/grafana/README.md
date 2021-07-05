@@ -3,6 +3,7 @@ Role Name: grafana
 
 This role:
 * deploys grafana in monitoring namespace
+* creates an ingress with letsencrypt including a valid certificate
 * creates a prometheus data source
 * create an admin user
 * loads Juice Shop Status Dashboard from roles/grafana/files/demo-grafana-dashboard.json
