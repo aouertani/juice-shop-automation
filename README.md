@@ -9,7 +9,7 @@ Each role manages a different componenet and can be used separately:
 * dns: Creates DNS record set in a managed zone. The zone needs to be created before running the role.
 * juice-shop: Deploys juice shop application in juice-shop namepace.
 * prometheus: Deploys prometheus in monitoring namespace.
-* grafana: Deploys grafan in monitoring namespace. Creates a prometheus data source and a user then loads Juice Shop Status Dashboard.
+* grafana: Deploys grafana in monitoring namespace. Creates a prometheus data source and a user then loads Juice Shop Status Dashboard.
 
 ```bash
 .
