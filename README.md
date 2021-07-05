@@ -1,6 +1,6 @@
 # juice-shop-automation
 
-A set of ansible roles and playbooks to automatically deploy juice-shop application and its ecosystem in Google Cloud Platform (GKE).
+A set of ansible roles and playbooks to automatically deploy [juice-shop](https://github.com/aouertani/juice-shop-dep) application and its ecosystem in Google Cloud Platform (GKE).
 Each role manages a different componenet and can be used separately:
 
 * common: Checks if kubectl, gcloud and helm are installed first and then authenticates to GKE using a service account key file and sets the current context.
