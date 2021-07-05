@@ -1,22 +1,43 @@
-Role Name
+Role Name: dns
 =========
 
-A brief description of the role goes here.
+This role creates DNS record set in a managed zone. The zone needs to be created before running the role.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+This role needs a [managed zone in GCP](https://cloud.google.com/dns/docs/zones) on which the records set for Juice Shop and Grafana will be created. It does not have any dependencies and can be run separately.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```yaml
+---
+zone_name: 
+  name: mambudemo-com
+  dnsName: mambudemo.com.
+
+juice_shop_dns: juiceshop.mambudemo.com
+grafana_dns: grafana.juiceshop.mambudemo.com
+
+ingress_nginx_controller: ingress-nginx-controller
+cert_manager_name_space: cert-manager
+
+gcp_project_id: curious-furnace-316611
+gcp_cred_kind: serviceaccount
+gcp_cred_file: "{{ lookup('env', 'GOOGLE_APPLICATION_CREDENTIALS') }}"
+```
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+This role needs community.kubernetes and google.cloud collection. It can be set in roles/cert-manager/meta/main.yml
+```yaml
+---
+  dependencies:
+    "community.kubernetes": "*"
+    "google.cloud": "*"
+```
 
 Example Playbook
 ----------------
@@ -25,14 +46,5 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+         - role: dna
+      tags: role-dns
