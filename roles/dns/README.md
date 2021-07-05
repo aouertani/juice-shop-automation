@@ -31,7 +31,7 @@ gcp_cred_file: "{{ lookup('env', 'GOOGLE_APPLICATION_CREDENTIALS') }}"
 Dependencies
 ------------
 
-This role needs community.kubernetes and google.cloud collection. It can be set in roles/cert-manager/meta/main.yml
+This role needs community.kubernetes and google.cloud collection. It can be set in roles/dns/meta/main.yml
 ```yaml
 ---
   dependencies:
