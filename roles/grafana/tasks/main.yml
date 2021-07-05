@@ -5,7 +5,6 @@
     name:  "{{ grafana_repo_name }}"
     repo_url:  "{{ grafana_chart_url }}"
 
-# TODO: check kubernetes.core.helm why kubernetes.core.helm doesn't create pvc for grafana helm chart
 - name: Deploy grafana
   community.kubernetes.helm:
     name: "{{ grafana_release_name }}"

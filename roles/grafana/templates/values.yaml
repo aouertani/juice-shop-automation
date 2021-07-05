@@ -1,9 +1,6 @@
 persistence:
   type: pvc
   enabled: true
-  # storageClassName: default
-  accessModes:
-    - ReadWriteOnce
   size: 10Gi
 
 deploymentStrategy:

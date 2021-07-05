@@ -22,7 +22,6 @@ ingress_controller_namespace: "cert-manager"
 # The following table contains the configurable parameters of the cert-manager
 #ingress_controller_values:
 #  - key=value
-
 cert_manager_le_clusterissuer_options:
   - name: letsencrypt-prod
     email: elouertani.ahmed@gmail.com
