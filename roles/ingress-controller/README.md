@@ -48,7 +48,7 @@ cert_manager_le_clusterissuer_options:
 Dependencies
 ------------
 
-This role needs cert-manager role to be run first and community.kubernetes collection. It can be set in roles/cert-manager/meta/main.yml
+This role needs cert-manager role to be run first and community.kubernetes collection. It can be set in roles/ingress-controller/meta/main.yml
 ```yaml
 ---
   dependencies:
