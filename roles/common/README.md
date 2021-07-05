@@ -1,22 +1,32 @@
-Role Name
+Role Name: common
 =========
 
-A brief description of the role goes here.
+This role:
+* checks if kubectl, gcloud and helm are installed
+* authenticates to GKE using a service account key file and sets the current context.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+This role does not have any dependencies and can be run separately.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```yaml
+---
+cluster_id: cluster-5
+cluster_zone: europe-central2
+gcp_project_id: curious-furnace-316611
+
+service_account_key_file: "{{ lookup('env', 'GOOGLE_APPLICATION_CREDENTIALS') }}"
+```
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+This role needs GOOGLE_APPLICATION_CREDENTIALS to be set. It should point to a service account key file, instructions to generate the file are explained here [here](https://cloud.google.com/docs/authentication/production#automatically)
+
 
 Example Playbook
 ----------------
@@ -25,14 +35,5 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+         - role: cert-common
+      tags: role-common
