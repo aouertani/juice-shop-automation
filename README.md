@@ -132,13 +132,13 @@ ansible-playbook --tags=role-<role_name>  juice-shop.yml
 * When the whole roles are successfully run the output must look like this:
 ```bash
 TASK [Juice Shop application URL] ********************************************************************************************************************************
-task path: /Users/aouertaniz/work/kube/courses/juice-shop-automation/juice-shop.yml:21
+task path: ..../juice-shop-automation/juice-shop.yml:21
 ok: [localhost] => {
     "msg": "Juice Shop application URL: https://juiceshop.mambudemo.com"
 }
 
 TASK [Grafana application URL] ***********************************************************************************************************************************
-task path: /Users/aouertaniz/work/kube/courses/juice-shop-automation/juice-shop.yml:25
+task path: ....juice-shop-automation/juice-shop.yml:25
 ok: [localhost] => {
     "msg": "Grafana application URL: https://grafana.juiceshop.mambudemo.com"
 }
